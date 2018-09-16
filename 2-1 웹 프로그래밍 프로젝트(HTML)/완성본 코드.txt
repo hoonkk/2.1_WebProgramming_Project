@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<script>
+    var pos = new initArray(9, 9, 9, 9, 9, 9, 9, 9, 9);
+    var nummoves = 0; //이동한 횟수 0으로 초기화.
+
+function initArray()
+    {
+this.length = initArray.arguments.length
+for (var i = 0; i < this.length; i++)
+this[i+1] = initArray.arguments[i]
+    }
+
+
+
+function random() { //랜덤으로 숫자 넣기
+today = new Date();
+num = today.getTime();
+num = Math.round(Math.abs(Math.sin (num)*1000000)) % 9; // 0~8까지 랜덤으로 넣기
+return num;
+}
+
+function display(pos)
+{
+for (var i=0; i<9; i++) {
+document.forms[0].elements[i].value = pos[i]; // forms 객체 제어
+}
+document.forms[0].moves.value= nummoves; // runmoves 객체 제어
+win(); //승리로 넘어간다.
+}
+
+function move(num)
+{
+if (num < 8 && pos[num+1]==0) { //왼쪽 이동
+pos[num+1]= pos[num];
+pos[num]= 0;
+nummoves++;
+}
+else if (num > 0 && pos[num-1]==0) { // 오른쪽 이동
+pos[num-1]= pos[num];
+pos[num]= 0;
+nummoves++;
+}
+else if (num > 2 && pos[num-3]==0) { //아래 이동
+pos[num-3]= pos[num];
+pos[num]= 0;
+nummoves++;
+}
+else if (num < 6 && pos[num+3]==0 ) { //위 이동
+pos[num+3]= pos[num];
+pos[num]= 0;
+nummoves++;
+}
+display(pos);
+}
+
+function win() {
+
+    if (pos[0] == 1 & pos[1] == 2 & pos[2] == 3 & pos[3] == 4 & pos[4] == 5 & pos[5] == 6 & pos[6] == 7 & pos[7] == 8 & pos[8] == 0)
+    { // 숫자가 다 일치하는경우
+        if (confirm('한판 더 하시겠습니까?')) //승리하는 경우
+            newgame();
+}
+
+}
+
+function newgame() { //새로운 게임 설계
+var x=1;
+for (var i = 0; i < 9; i++)
+{
+pos[i]=9;
+}
+
+for (var i=0; i<9;i++) { //랜덤으로 숫자 배열
+    randomnum=random();
+    if (randomnum==9) randomnum=8;
+    x = 1;
+
+    for (var j = 0; j < 9; j++)
+    {
+        if (randomnum == pos[j])
+    {
+        x=0;
+        break;
+    }
+    }
+if (x==0) {
+i--;
+continue;  // x=0일 경우는, 랜덤으로 받은 숫자가 배열안의 숫자와 같은,
+//중복된 경우이므로, 그 전 배열부터 다시 넣는다.
+}
+pos[i]=randomnum; // 랜덤된 숫자를 다시 넣는다.
+}
+
+nummoves=0; // 런무브 초기화
+display(pos); //새로 다시 그린다
+}
+</script>
+</head>
+
+<body onLoad="newgame()" >
+     <h1>숫자 배열하기 게임</h1>
+            <form>
+            <input type="button" value=" 1 " onClick="move(0)">
+            <input type="button" value=" 2 " onClick="move(1)">
+            <input type="button" value=" 3 " onClick="move(2)"><br>
+            <input type="button" value=" 4 " onClick="move(3)">
+            <input type="button" value=" 5 " onClick="move(4)">
+            <input type="button" value=" 6 " onClick="move(5)"><br>
+            <input type="button" value=" 7 " onClick="move(6)">
+            <input type="button" value=" 8 " onClick="move(7)">
+            <input type="button" value=" 0 " onClick="move(8)">     
+         <p>    1~8까지 차례대로 놓으세요.</p>
+        <p>0을 기준으로 양 옆, 위 아래로 이동이 가능합니다.</p>
+                옮긴 숫자 : <input name="moves" size=7 value="0">
+                <input type="submit" value="New Game" onClick="newgame()">
+        </FORM>
+</body>
+</html>
